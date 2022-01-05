@@ -29,6 +29,7 @@ jobs:
       - name: 🚀 Publish main branch
         if: github.ref == 'refs/heads/main'
         uses: fission-suite/publish-action@v1
+        timeout-minutes: 1200
         with:
           machine_key: ${{ secrets.FISSION_MACHINE_KEY }}
           app_url: benevolent-huge-elderly-frog.fission.app
@@ -37,6 +38,7 @@ jobs:
       - name: 🚀 Publish PRs
         if: github.ref != 'refs/heads/main'
         uses: fission-suite/publish-action@v1
+        timeout-minutes: 1200
         with:
           machine_key: ${{ secrets.FISSION_MACHINE_KEY }}
           build_dir: ./public
