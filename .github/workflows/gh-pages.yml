@@ -32,7 +32,7 @@ jobs:
         timeout-minutes: 1200
         with:
           machine_key: ${{ secrets.FISSION_MACHINE_KEY }}
-          app_url: benevolent-huge-elderly-frog.fission.app
+          app_url: magnificient-ancient-red-llama.fission.app
           build_dir: ./public
           # the main branch will always be at this subdomain
       - name: 🚀 Publish PRs
