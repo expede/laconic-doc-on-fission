@@ -1,0 +1,44 @@
+name: GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Set a branch name to trigger deployment
+  pull_request:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true  # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.91.0'
+          extended: true
+
+      - name: Build
+        run: hugo --minify
+        
+      - name: 🚀 Publish main branch
+        if: github.ref == 'refs/heads/main'
+        uses: fission-suite/publish-action@v1
+        with:
+          machine_key: ${{ secrets.FISSION_MACHINE_KEY }}
+          app_url: wicked-junior-orange-deer.fission.app
+          build_dir: ./public
+          # the main branch will always be at this subdomain
+      - name: 🚀 Publish PRs
+        if: github.ref != 'refs/heads/main'
+        uses: fission-suite/publish-action@v1
+        with:
+          machine_key: ${{ secrets.FISSION_MACHINE_KEY }}
+          build_dir: ./public
+          # no app_url means a new thin-long-fairy.fission.app subdomain gets created, per PR
+
